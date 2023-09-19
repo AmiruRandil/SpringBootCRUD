@@ -4,9 +4,8 @@ import com.example.SpringBootCRUD.constant.StringConstantList;
 import com.example.SpringBootCRUD.dto.ResponseDTO;
 import com.example.SpringBootCRUD.entity.Student;
 import com.example.SpringBootCRUD.repository.StudentRepository;
-import com.example.SpringBootCRUD.constant.StringConstantList.*;
+import com.example.SpringBootCRUD.service.StudentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import java.util.List;
 @RequestMapping("/student")
 public class StudentController {
 
-        private final StudentRepository studentRepository;
+        private final StudentService studentService;
 
         /*
          * This API is to check if the service is up and running.
@@ -39,8 +38,8 @@ public class StudentController {
          */
         @PostMapping("/add-student")
         public Student addStudent(@RequestBody Student student){
-        studentRepository.save(student);
-                return student;
+                return studentService.addStudent(student);
+
         }
 
         /*
@@ -50,7 +49,7 @@ public class StudentController {
          */
         @GetMapping("/get-all-students")
         public List<Student> getAllStudents(){
-                return studentRepository.findAll();
+                return studentService.getAllStudents();
         }
 
         /*
@@ -62,7 +61,7 @@ public class StudentController {
          */
         @GetMapping("/get-student/{studId}")
         public Student getStudent(@PathVariable int studId){
-                return studentRepository.findById(studId).get();
+                return studentService.getStudent(studId);
         }
 
         /*
@@ -74,11 +73,7 @@ public class StudentController {
          */
         @DeleteMapping("/delete-student/{studId}")
         public String deleteStudent(@PathVariable int studId){
-                Student student = studentRepository.findById(studId).get();
-                if (student != null){
-                        studentRepository.delete(student);
-                }
-                return "Record deleted successfully";
+                return studentService.deleteStudent(studId);
         }
 
         /*
@@ -90,8 +85,7 @@ public class StudentController {
          */
         @PutMapping("update-student")
         public Student updateStudent(@RequestBody Student student){
-                studentRepository.save(student);
-                return student;
+                return studentService.updateStudent(student);
         }
 
 
